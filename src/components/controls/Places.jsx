@@ -9,6 +9,7 @@ import {
 	ComboboxOption,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
+import { useNotificationsUpdate } from "../../context/NotificationsProvider";
 
 const Places = ({
 	addresses,
@@ -21,18 +22,28 @@ const Places = ({
 }) => {
 	const { status, data } = suggestions;
 
+	const updateNotifications = useNotificationsUpdate();
+
 	const handleSelect = async (val) => {
 		setValue(val, false);
 		clearSuggestions();
 
-		const results = await getGeocode({ address: val });
-		const { lat, lng } = await getLatLng(results[0]);
+		if (
+			addresses.find((address) => address.address === val) === undefined
+		) {
+			const results = await getGeocode({ address: val });
+			const { lat, lng } = await getLatLng(results[0]);
 
-		setAddresses({
-			address: val,
-			latLng: { lat, lng },
-			visited: false,
-		});
+			setAddresses({
+				address: val,
+				latLng: { lat, lng },
+				visited: false,
+			});
+
+			return;
+		}
+
+		updateNotifications("error", "Something went wrong.");
 	};
 
 	return (
