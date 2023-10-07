@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const Error = ({ message }) => {
+type ErrorProps = {
+	message: string
+}
+
+const Error = ({ message } : ErrorProps) => {
 	const [visible, setVisible] = useState(true);
 
 	setTimeout(() => {

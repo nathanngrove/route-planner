@@ -1,30 +1,37 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Map from "../components/map/Map";
 import Panel from "../components/map/Panel";
 import NotificationContainer from "../components/notifications/NotificationContainer";
 import Error from "../components/notifications/Error";
 import { useNotifications } from "../context/NotificationsProvider";
+import { GoogleMap } from "@react-google-maps/api";
+
+export type Address = {
+	address: string
+	latLng: google.maps.LatLngLiteral
+	visited: boolean
+}
 
 const Index = () => {
-	const mapRef = useRef();
-	const [addresses, setAddresses] = useState([]);
+	const mapRef = useRef<GoogleMap>();
+	const [addresses, setAddresses] = useState<Array<Address>>([]);
 
 	const notifications = useNotifications();
 
-	console.log("notif", notifications);
+	console.log(mapRef);
 
 	return (
 		<div className="container">
 			<NotificationContainer>
-				{notifications.error !== undefined &&
-					notifications.error.map((err, i) => (
+				{notifications?.error !== null &&
+					notifications?.error.map((err, i) => (
 						<Error
 							key={i}
 							message={err}
 						/>
 					))}
-				{notifications.info !== undefined &&
-					notifications.info.map((err) => (
+				{notifications?.info !== null &&
+					notifications?.info.map((err, i) => (
 						<Error
 							key={i}
 							message={err}

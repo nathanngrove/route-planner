@@ -1,6 +1,12 @@
-import React from "react";
+import { Address } from "../../pages";
 
-const AddressListItem = ({ address, addresses, setAddresses, index }) => {
+type AddressListItemProps = {
+	address: string
+	addresses: Array<Address>
+	setAddresses: (address: Array<Address>)=>void
+}
+
+const AddressListItem = ({ address, addresses, setAddresses } : AddressListItemProps) => {
 	const firstCommaLoction = address.indexOf(",");
 	const shortenedAddress = address.slice(0, firstCommaLoction);
 	const restOfAddress = address.slice(firstCommaLoction + 2, address.length);

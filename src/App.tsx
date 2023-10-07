@@ -1,11 +1,12 @@
-import { useLoadScript } from "@react-google-maps/api";
+import { LoadScriptProps, useLoadScript } from "@react-google-maps/api";
 import Index from "./pages/index";
 import NotificationsProvider from "./context/NotificationsProvider";
 
-const libraries = ["places"];
+const libraries: LoadScriptProps['libraries'] = ["places"];
 
 function App() {
-	const { isLoaded } = useLoadScript({
+	
+  const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
 		libraries,
 	});
@@ -19,4 +20,4 @@ function App() {
 	);
 }
 
-export default App;
+export default App

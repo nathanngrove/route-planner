@@ -1,6 +1,4 @@
-import React from "react";
-
-import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { getGeocode, getLatLng, ClearSuggestions, Suggestions, SetValue } from "use-places-autocomplete";
 import {
 	Combobox,
 	ComboboxInput,
@@ -10,6 +8,17 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 import { useNotificationsUpdate } from "../../context/NotificationsProvider";
+import { Address } from "../../pages";
+
+type PlacesProps = {
+	addresses : Array<Address>
+	setAddresses : (address: Address)=>void
+	ready : boolean,
+	value : string,
+	setValue : SetValue,
+	suggestions : Suggestions,
+	clearSuggestions : ClearSuggestions,
+}
 
 const Places = ({
 	addresses,
@@ -19,12 +28,12 @@ const Places = ({
 	setValue,
 	suggestions,
 	clearSuggestions,
-}) => {
+} : PlacesProps) => {
 	const { status, data } = suggestions;
 
 	const updateNotifications = useNotificationsUpdate();
 
-	const handleSelect = async (val) => {
+	const handleSelect = async (val : string) => {
 		setValue(val, false);
 		clearSuggestions();
 
