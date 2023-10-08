@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useEffect } from "react";
 import {
 	GoogleMap,
 	Marker,
@@ -16,6 +16,12 @@ type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions
 
 const Map = ({mapRef, addresses} : MapProps) => {
+	navigator.geolocation.getCurrentPosition(
+		(success) => {
+			mapRef.current?.panTo({lat: success.coords.latitude, lng: success.coords.longitude});
+		}, 
+		(error) => alert(error),
+		{ enableHighAccuracy: true });
 	const center = useMemo<LatLngLiteral>(() => ({ lat: 34.0549, lng: -118.2426 }), []);
 	const options = useMemo<MapOptions>(
 		() => ({ disableDefaultUI: true, clickableIcons: false }),

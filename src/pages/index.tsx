@@ -9,7 +9,14 @@ import { GoogleMap } from "@react-google-maps/api";
 export type Address = {
 	address: string
 	latLng: google.maps.LatLngLiteral
+	distances: Array<DistanceObject>
 	visited: boolean
+}
+
+export type DistanceObject = {
+	from: string
+	to: string
+	distance: number
 }
 
 const Index = () => {
@@ -17,8 +24,6 @@ const Index = () => {
 	const [addresses, setAddresses] = useState<Array<Address>>([]);
 
 	const notifications = useNotifications();
-
-	console.log(mapRef);
 
 	return (
 		<div className="container">

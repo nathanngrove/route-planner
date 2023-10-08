@@ -46,6 +46,7 @@ const Places = ({
 			setAddresses({
 				address: val,
 				latLng: { lat, lng },
+				distances: [],
 				visited: false,
 			});
 

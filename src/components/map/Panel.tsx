@@ -43,7 +43,7 @@ const Panel = ({ mapRef, addresses, setAddresses } : PanelProps) => {
 					/>
 				))}
 			</AddressList>
-			<OptimizeRouteButton />
+			<OptimizeRouteButton addresses={addresses}/>
 		</>
 	);
 };
