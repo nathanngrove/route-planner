@@ -8,12 +8,12 @@ import { GoogleMap } from "@react-google-maps/api";
 import { Address } from "../../pages";
 
 type PanelProps = {
-	mapRef: React.MutableRefObject<GoogleMap | undefined>
-	addresses: Array<Address>
-	setAddresses : (addresses: Array<Address>)=>void
-}
+	mapRef: React.MutableRefObject<GoogleMap | undefined>;
+	addresses: Array<Address>;
+	setAddresses: (addresses: Array<Address>) => void;
+};
 
-const Panel = ({ mapRef, addresses, setAddresses } : PanelProps) => {
+const Panel = ({ mapRef, addresses, setAddresses }: PanelProps) => {
 	const { ready, value, setValue, suggestions, clearSuggestions } =
 		usePlacesAutocomplete();
 
@@ -34,16 +34,21 @@ const Panel = ({ mapRef, addresses, setAddresses } : PanelProps) => {
 				clearSuggestions={clearSuggestions}
 			/>
 			<AddressList>
-				{addresses.map(({ address, latLng }) => (
-					<AddressListItem
-						key={latLng.lat + latLng.lng}
-						address={address}
-						addresses={addresses}
-						setAddresses={setAddresses}
-					/>
-				))}
+				{addresses.map(({ address, latLng }, i) =>
+					i === 0 ? null : (
+						<AddressListItem
+							key={latLng.lat + latLng.lng}
+							address={address}
+							addresses={addresses}
+							setAddresses={setAddresses}
+						/>
+					)
+				)}
 			</AddressList>
-			<OptimizeRouteButton addresses={addresses}/>
+			<OptimizeRouteButton
+				addresses={addresses}
+				setAddresses={setAddresses}
+			/>
 		</>
 	);
 };

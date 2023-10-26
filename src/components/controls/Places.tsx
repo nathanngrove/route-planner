@@ -1,4 +1,10 @@
-import { getGeocode, getLatLng, ClearSuggestions, Suggestions, SetValue } from "use-places-autocomplete";
+import {
+	getGeocode,
+	getLatLng,
+	ClearSuggestions,
+	Suggestions,
+	SetValue,
+} from "use-places-autocomplete";
 import {
 	Combobox,
 	ComboboxInput,
@@ -11,14 +17,14 @@ import { useNotificationsUpdate } from "../../context/NotificationsProvider";
 import { Address } from "../../pages";
 
 type PlacesProps = {
-	addresses : Array<Address>
-	setAddresses : (address: Address)=>void
-	ready : boolean,
-	value : string,
-	setValue : SetValue,
-	suggestions : Suggestions,
-	clearSuggestions : ClearSuggestions,
-}
+	addresses: Array<Address>;
+	setAddresses: (address: Address) => void;
+	ready: boolean;
+	value: string;
+	setValue: SetValue;
+	suggestions: Suggestions;
+	clearSuggestions: ClearSuggestions;
+};
 
 const Places = ({
 	addresses,
@@ -28,12 +34,12 @@ const Places = ({
 	setValue,
 	suggestions,
 	clearSuggestions,
-} : PlacesProps) => {
+}: PlacesProps) => {
 	const { status, data } = suggestions;
 
 	const updateNotifications = useNotificationsUpdate();
 
-	const handleSelect = async (val : string) => {
+	const handleSelect = async (val: string) => {
 		setValue(val, false);
 		clearSuggestions();
 
@@ -46,8 +52,6 @@ const Places = ({
 			setAddresses({
 				address: val,
 				latLng: { lat, lng },
-				distances: [],
-				visited: false,
 			});
 
 			return;

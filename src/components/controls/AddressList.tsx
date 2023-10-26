@@ -1,10 +1,10 @@
 import React from "react";
 
 type AddressListProps = {
-	children: React.ReactNode
-}
+	children: React.ReactNode;
+};
 
-const AddressList = ({ children } : AddressListProps) => {
+const AddressList = ({ children }: AddressListProps) => {
 	return <ul className="address-list">{children}</ul>;
 };
 

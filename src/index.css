@@ -1,169 +1,170 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+		"Lucida Sans", Arial, sans-serif;
 
-  --controls-padding-top: 2rem;
+	--controls-padding-top: 2rem;
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
 }
 
 .controls {
-  width: 100%;
-  max-height: 70dvh;
-  position: fixed;
-  bottom: 0;
-  padding: var(--controls-padding-top) 1rem; 
-  background: #f7f7f7;
-  color: rgb(0, 0, 0);
-  z-index: 1;
-  border-radius: 10px 10px 0px 0px;
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
+	width: 100%;
+	max-height: 70dvh;
+	position: fixed;
+	bottom: 0;
+	padding: var(--controls-padding-top) 1rem;
+	background: #f7f7f7;
+	color: rgb(0, 0, 0);
+	z-index: 1;
+	border-radius: 10px 10px 0px 0px;
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
 }
 
 .panel-handle {
-  height: 0.25rem;
-  width: var(--controls-padding-top);
-  border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.25);
-  position: absolute;
-  top: calc((var(--controls-padding-top) / 2) - (0.25rem / 2));
-  left: calc(50% - (var(--controls-padding-top) / 2));
+	height: 0.25rem;
+	width: var(--controls-padding-top);
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.25);
+	position: absolute;
+	top: calc((var(--controls-padding-top) / 2) - (0.25rem / 2));
+	left: calc(50% - (var(--controls-padding-top) / 2));
 }
 
 .map {
-  width: 100%;
-  height: 100vh;
+	width: 100%;
+	height: 100vh;
 }
 
 .map-container {
-  width: 100%;
-  height: 100vh;
+	width: 100%;
+	height: 100vh;
 }
 
 .highlight {
-  font-size: 1.25rem;
-  font-weight: bold;
+	font-size: 1.25rem;
+	font-weight: bold;
 }
 
 .combobox-popover {
-  z-index: 2;
+	z-index: 2;
 }
 
 .combobox-input {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 10px;
-  border: 0;
+	width: 100%;
+	padding: 0.5rem;
+	border-radius: 10px;
+	border: 0;
 }
 
 .address-list {
-  list-style-type: none;
+	list-style-type: none;
 }
 
 .address-list-item {
-  border-bottom: 4px #f7f7f7 solid;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
-  background-color: white;
+	border-bottom: 4px #f7f7f7 solid;
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+	background-color: white;
 }
 
 .address-text {
-  font-size: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
+	font-size: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.125rem;
 }
 
 .address-list span {
-  font-size: 1rem;
-  color: rgba(0, 0, 0, 0.5);
+	font-size: 1rem;
+	color: rgba(0, 0, 0, 0.5);
 }
 
 .flex-grow {
-  flex-grow: 2;
+	flex-grow: 2;
 }
 
 .directions-button {
-  padding: 1rem;
-  background-color: rgb(0, 200, 0);
-  font-weight: bold;
-  border-radius: 10px;
-  text-decoration: none;
-  color: white;
+	padding: 1rem;
+	background-color: rgb(0, 200, 0);
+	font-weight: bold;
+	border-radius: 10px;
+	text-decoration: none;
+	color: white;
 }
 
 .directions-button:hover {
-  background-color: green;
+	background-color: green;
 }
 
 .remove-button {
-  padding: 0.5rem;
-  background-color: rgb(200, 0, 0);
-  border-radius: 10px;
-  border: none;
-  display: grid;
-  place-items: center;
+	padding: 0.5rem;
+	background-color: rgb(200, 0, 0);
+	border-radius: 10px;
+	border: none;
+	display: grid;
+	place-items: center;
 }
 
 .remove-button:hover {
-  background-color: maroon;
+	background-color: maroon;
 }
 
 .optimize-button {
-  padding: 1rem;
-  background-color: rgb(0, 200, 0);
-  width: 100%;
-  font-weight: bold;
-  border-radius: 10px;
-  text-decoration: none;
-  color: white;
-  border: none;
-  font-size: 1.25rem;
+	padding: 1rem;
+	background-color: rgb(0, 200, 0);
+	width: 100%;
+	font-weight: bold;
+	border-radius: 10px;
+	text-decoration: none;
+	color: white;
+	border: none;
+	font-size: 1.25rem;
 }
 
 .optimize-button:hover {
-  background-color: green;
+	background-color: green;
 }
 
 .notifications-container {
-  z-index: 2;
-  width: 100%;
-  gap: 0.25rem;
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 1rem;
+	z-index: 2;
+	width: 100%;
+	gap: 0.25rem;
+	background-color: transparent;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	top: 1rem;
 }
 
 .error-message {
-  padding: 1rem;
-  background-color: red;
-  color: white;
-  font-weight: bold;
-  border-radius: 5px;
-  animation: fade 1s ease 5s;
+	padding: 1rem;
+	background-color: red;
+	color: white;
+	font-weight: bold;
+	border-radius: 5px;
+	animation: fade 1s ease 5s;
 }
 
 @keyframes fade {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
 }

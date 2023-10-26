@@ -1,11 +1,13 @@
 import React, { useState, useContext } from "react";
 
 const NotificationsContext = React.createContext<Notifications | null>(null);
-const NotificationsUpdateContext = React.createContext<((type: string, newNotification: string) => void)>(()=>{});
+const NotificationsUpdateContext = React.createContext<
+	(type: string, newNotification: string) => void
+>(() => {});
 
-type Notifications = { 
-	info: Array<string>
-	error: Array<string>
+type Notifications = {
+	info: Array<string>;
+	error: Array<string>;
 };
 
 export function useNotifications() {
@@ -17,13 +19,16 @@ export function useNotificationsUpdate() {
 }
 
 type NotificationsProviderProps = {
-	children: React.ReactNode
-}
+	children: React.ReactNode;
+};
 
-const NotificationsProvider = ({ children } : NotificationsProviderProps) => {
-	const [notifications, setNotifications] = useState<Notifications>({info: [], error: []});
+const NotificationsProvider = ({ children }: NotificationsProviderProps) => {
+	const [notifications, setNotifications] = useState<Notifications>({
+		info: [],
+		error: [],
+	});
 
-	function updateNotifications(type : string, newNotification : string) {
+	function updateNotifications(type: string, newNotification: string) {
 		if (type === "info")
 			setNotifications({
 				...notifications,

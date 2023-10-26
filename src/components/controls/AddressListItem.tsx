@@ -1,12 +1,16 @@
 import { Address } from "../../pages";
 
 type AddressListItemProps = {
-	address: string
-	addresses: Array<Address>
-	setAddresses: (address: Array<Address>)=>void
-}
+	address: string;
+	addresses: Array<Address>;
+	setAddresses: (address: Array<Address>) => void;
+};
 
-const AddressListItem = ({ address, addresses, setAddresses } : AddressListItemProps) => {
+const AddressListItem = ({
+	address,
+	addresses,
+	setAddresses,
+}: AddressListItemProps) => {
 	const firstCommaLoction = address.indexOf(",");
 	const shortenedAddress = address.slice(0, firstCommaLoction);
 	const restOfAddress = address.slice(firstCommaLoction + 2, address.length);
@@ -21,9 +25,7 @@ const AddressListItem = ({ address, addresses, setAddresses } : AddressListItemP
 	return (
 		<li>
 			<div className="address-list-item">
-				<button
-					className="remove-button"
-					onClick={removeAddress}>
+				<button className="remove-button" onClick={removeAddress}>
 					<svg
 						width="20"
 						height="20"
@@ -40,9 +42,7 @@ const AddressListItem = ({ address, addresses, setAddresses } : AddressListItemP
 					{shortenedAddress}
 					<span>{restOfAddress}</span>
 				</p>
-				<a
-					className="directions-button"
-					href="#">
+				<a className="directions-button" href="#">
 					GO
 				</a>
 			</div>
