@@ -1,30 +1,63 @@
 import React from "react";
-import Places from "../controls/Places";
+import Places from "../controls/AddressInput";
 import AddressList from "../controls/AddressList";
-import AddressListItem from "../controls/AddressListItem";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import OptimizeRouteButton from "../controls/OptimizeRouteButton";
 import { GoogleMap } from "@react-google-maps/api";
 import { Address } from "../../pages";
 
+function getCenterOfCoords(addresses: Array<Address>) {
+	if (addresses.length === 1) return addresses[0].latLng;
+
+	let center = { lat: 0, lng: 0 };
+
+	addresses.forEach(({ address, latLng }) => {
+		const { lat, lng } = latLng;
+
+		center.lat += lat;
+		center.lng += lng;
+	});
+
+	center.lat = center.lat / addresses.length;
+	center.lng = center.lng / addresses.length;
+
+	return center;
+}
+
 type PanelProps = {
 	mapRef: React.MutableRefObject<GoogleMap | undefined>;
 	addresses: Array<Address>;
 	setAddresses: (addresses: Array<Address>) => void;
+	fullPanel: boolean;
+	setFullPanel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Panel = ({ mapRef, addresses, setAddresses }: PanelProps) => {
+const Panel = ({
+	mapRef,
+	addresses,
+	setAddresses,
+	fullPanel,
+	setFullPanel,
+}: PanelProps) => {
 	const { ready, value, setValue, suggestions, clearSuggestions } =
 		usePlacesAutocomplete();
 
 	return (
-		<>
-			<div className="panel-handle"></div>
+		<div className={`panel ${fullPanel ? "panel-max" : "panel-min"}`}>
+			<div
+				className="panel-handle"
+				onClick={() => {
+					setFullPanel((prevPanel) => {
+						return !prevPanel;
+					});
+				}}></div>
 			<Places
 				addresses={addresses}
 				setAddresses={(position) => {
-					setAddresses([...addresses, position]);
-					mapRef.current?.panTo(position.latLng);
+					const newAddresses = [...addresses, position];
+					const center = getCenterOfCoords(newAddresses);
+					setAddresses(newAddresses);
+					mapRef.current?.panTo(center);
 					setValue("");
 				}}
 				ready={ready}
@@ -32,24 +65,19 @@ const Panel = ({ mapRef, addresses, setAddresses }: PanelProps) => {
 				setValue={setValue}
 				suggestions={suggestions}
 				clearSuggestions={clearSuggestions}
+				setFullPanel={setFullPanel}
 			/>
-			<AddressList>
-				{addresses.map(({ address, latLng }, i) =>
-					i === 0 ? null : (
-						<AddressListItem
-							key={latLng.lat + latLng.lng}
-							address={address}
-							addresses={addresses}
-							setAddresses={setAddresses}
-						/>
-					)
-				)}
-			</AddressList>
+			{addresses.length !== 0 && (
+				<AddressList
+					addresses={addresses}
+					setAddresses={setAddresses}
+				/>
+			)}
 			<OptimizeRouteButton
 				addresses={addresses}
 				setAddresses={setAddresses}
 			/>
-		</>
+		</div>
 	);
 };
 

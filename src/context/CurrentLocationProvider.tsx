@@ -28,7 +28,8 @@ const CurrentLocationProvider = ({
 				});
 				console.log(currentLocation);
 			},
-			(error) => updateNotifications("error", error.code + error.message),
+			(error) =>
+				updateNotifications("error", error.code + ": " + error.message),
 			{ enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
 		);
 	}, []);

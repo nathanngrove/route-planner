@@ -24,6 +24,7 @@ type PlacesProps = {
 	setValue: SetValue;
 	suggestions: Suggestions;
 	clearSuggestions: ClearSuggestions;
+	setFullPanel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const Places = ({
@@ -34,6 +35,7 @@ const Places = ({
 	setValue,
 	suggestions,
 	clearSuggestions,
+	setFullPanel,
 }: PlacesProps) => {
 	const { status, data } = suggestions;
 
@@ -64,6 +66,9 @@ const Places = ({
 		<Combobox onSelect={handleSelect}>
 			<ComboboxInput
 				value={value}
+				onFocus={() => {
+					setFullPanel(true);
+				}}
 				onChange={(e) => setValue(e.target.value)}
 				disabled={!ready}
 				className="combobox-input"

@@ -10,9 +10,10 @@ type MapOptions = google.maps.MapOptions;
 type MapProps = {
 	mapRef: React.MutableRefObject<GoogleMap | undefined>;
 	addresses: Array<Address>;
+	fullPanel: boolean;
 };
 
-const Map = ({ mapRef, addresses }: MapProps) => {
+const Map = ({ mapRef, addresses, fullPanel }: MapProps) => {
 	const center = useMemo<LatLngLiteral>(
 		() => ({ lat: 34.0549, lng: -118.2426 }),
 		[]
@@ -27,7 +28,7 @@ const Map = ({ mapRef, addresses }: MapProps) => {
 	const onLoad = useCallback((map: any) => (mapRef.current = map), []);
 
 	return (
-		<>
+		<div className={`map ${fullPanel ? "map-min" : "map-max"}`}>
 			<GoogleMap
 				zoom={10}
 				center={currentLocation ? currentLocation : center}
@@ -42,7 +43,7 @@ const Map = ({ mapRef, addresses }: MapProps) => {
 						/>
 					))}
 			</GoogleMap>
-		</>
+		</div>
 	);
 };
 

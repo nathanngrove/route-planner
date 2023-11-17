@@ -1,3 +1,4 @@
+import { useNotificationsUpdate } from "../../context/NotificationsProvider";
 import { Address, DistanceObject } from "../../pages";
 import calculateDistance from "../../utils/calculateDistance";
 
@@ -80,10 +81,22 @@ const OptimizeRouteButton = ({
 	addresses,
 	setAddresses,
 }: OptimizeRouteButtonProps) => {
+	const updateNotifications = useNotificationsUpdate();
+
 	function optimizeRoute() {
+		if (addresses.length <= 1) {
+			updateNotifications(
+				"error",
+				"You have to enter more than one address to optimize a route!"
+			);
+			return;
+		}
+
 		const newAddresses: Array<Address> = [];
 		createOptimizedRoute(newAddresses, addresses);
+		console.log(newAddresses);
 		setAddresses(newAddresses);
+		updateNotifications("info", "Route optimized!");
 	}
 
 	return (

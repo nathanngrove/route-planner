@@ -4,12 +4,14 @@ type AddressListItemProps = {
 	address: string;
 	addresses: Array<Address>;
 	setAddresses: (address: Array<Address>) => void;
+	isEditing: boolean;
 };
 
 const AddressListItem = ({
 	address,
 	addresses,
 	setAddresses,
+	isEditing,
 }: AddressListItemProps) => {
 	const firstCommaLoction = address.indexOf(",");
 	const shortenedAddress = address.slice(0, firstCommaLoction);
