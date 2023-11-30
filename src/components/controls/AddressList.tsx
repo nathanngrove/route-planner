@@ -5,13 +5,18 @@ import AddressListItem from "./AddressListItem";
 type AddressListProps = {
 	addresses: Array<Address>;
 	setAddresses: (addresses: Array<Address>) => void;
+	fullPanel: boolean;
 };
 
-const AddressList = ({ addresses, setAddresses }: AddressListProps) => {
+const AddressList = ({
+	addresses,
+	setAddresses,
+	fullPanel,
+}: AddressListProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 
 	return (
-		<>
+		<div className="address-list-grow">
 			{!isEditing && (
 				<button
 					className="address-menu-button"
@@ -26,7 +31,10 @@ const AddressList = ({ addresses, setAddresses }: AddressListProps) => {
 					Done
 				</button>
 			)}
-			<ul className="address-list">
+			<ul
+				className={`address-list ${
+					fullPanel ? "address-list-max" : "address-list-min"
+				}`}>
 				{addresses.map(({ address, latLng }) => (
 					<AddressListItem
 						key={latLng.lat + latLng.lng}
@@ -37,7 +45,7 @@ const AddressList = ({ addresses, setAddresses }: AddressListProps) => {
 					/>
 				))}
 			</ul>
-		</>
+		</div>
 	);
 };
 

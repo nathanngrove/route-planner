@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Address } from "../../pages";
+import useSwipe from "../../utils/useSwipe";
 
 type AddressListItemProps = {
 	address: string;
@@ -13,6 +15,18 @@ const AddressListItem = ({
 	setAddresses,
 	isEditing,
 }: AddressListItemProps) => {
+	const [showDelete, setShowDelete] = useState(false);
+
+	const { onTouchMove, onTouchStart, onTouchEnd } = useSwipe({
+		direction: "horizontal",
+		leftFunction: () => {
+			setShowDelete(true);
+		},
+		rightFunction: () => {
+			setShowDelete(false);
+		},
+	});
+
 	const firstCommaLoction = address.indexOf(",");
 	const shortenedAddress = address.slice(0, firstCommaLoction);
 	const restOfAddress = address.slice(firstCommaLoction + 2, address.length);
@@ -25,22 +39,23 @@ const AddressListItem = ({
 	};
 
 	return (
-		<li>
-			<div className="address-list-item">
-				<button className="remove-button" onClick={removeAddress}>
-					<svg
-						width="20"
-						height="20"
-						viewBox="0 0 20 20"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M10 1C5 1 1 5 1 10C1 15 5 19 10 19C15 19 19 15 19 10C19 5 15 1 10 1ZM10 17C6.1 17 3 13.9 3 10C3 6.1 6.1 3 10 3C13.9 3 17 6.1 17 10C17 13.9 13.9 17 10 17ZM6 9V11H14V9H6Z"
-							fill="white"
-						/>
-					</svg>
-				</button>
-				<p className="address-text flex-grow">
+		<li className="address-list-item">
+			<button
+				className={`remove-button ${
+					showDelete ? "bring-up" : "bring-down"
+				}`}
+				onClick={removeAddress}>
+				Delete
+			</button>
+			<div
+				className={`address-list-item-content ${
+					showDelete ? "show-delete" : "hide-delete"
+				}`}
+				onTouchMove={(e) => onTouchMove(e)}
+				onTouchStart={(e) => onTouchStart(e)}
+				onTouchEnd={() => onTouchEnd()}>
+				<button>Move</button>
+				<p className="address-text">
 					{shortenedAddress}
 					<span>{restOfAddress}</span>
 				</p>

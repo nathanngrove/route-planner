@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import Map, { LatLngLiteral } from "../components/map/Map";
 import Panel from "../components/map/Panel";
 import NotificationContainer from "../components/notifications/NotificationContainer";
-import NotificationBanner from "../components/notifications/NotificationBanner";
-import { useNotifications } from "../context/NotificationsProvider";
 import { GoogleMap } from "@react-google-maps/api";
 import { useCurrentLocation } from "../context/CurrentLocationProvider";
 

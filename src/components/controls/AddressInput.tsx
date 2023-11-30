@@ -16,7 +16,7 @@ import "@reach/combobox/styles.css";
 import { useNotificationsUpdate } from "../../context/NotificationsProvider";
 import { Address } from "../../pages";
 
-type PlacesProps = {
+type AddressInputProps = {
 	addresses: Array<Address>;
 	setAddresses: (address: Address) => void;
 	ready: boolean;
@@ -27,7 +27,7 @@ type PlacesProps = {
 	setFullPanel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Places = ({
+const AddressInput = ({
 	addresses,
 	setAddresses,
 	ready,
@@ -36,7 +36,7 @@ const Places = ({
 	suggestions,
 	clearSuggestions,
 	setFullPanel,
-}: PlacesProps) => {
+}: AddressInputProps) => {
 	const { status, data } = suggestions;
 
 	const updateNotifications = useNotificationsUpdate();
@@ -63,7 +63,7 @@ const Places = ({
 	};
 
 	return (
-		<Combobox onSelect={handleSelect}>
+		<Combobox onSelect={handleSelect} className="combobox-container">
 			<ComboboxInput
 				value={value}
 				onFocus={() => {
@@ -89,4 +89,4 @@ const Places = ({
 	);
 };
 
-export default Places;
+export default AddressInput;
