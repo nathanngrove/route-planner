@@ -16,7 +16,7 @@ const AddressList = ({
 	const [isEditing, setIsEditing] = useState(false);
 
 	return (
-		<div className="address-list-grow">
+		<div>
 			{!isEditing && (
 				<button
 					className="address-menu-button"

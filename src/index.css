@@ -6,7 +6,7 @@
 	font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
 		"Lucida Sans", Arial, sans-serif;
 
-	--pd-sm: 1rem;
+	--pd-sm: 0.5rem;
 	--pd-med: 1rem;
 
 	--fs-400: 1.25rem;
@@ -43,6 +43,21 @@
 .panel-min {
 	height: 40svh;
 }
+
+/* .panel {
+	flex-direction: row-reverse;
+	height: 100vh;
+	width: 40vw;
+	transition: width 500ms ease;
+}
+
+.panel-max {
+	width: 70svh;
+}
+
+.panel-min {
+	width: 20svh;
+} */
 
 .panel-content-container {
 	display: flex;
@@ -130,7 +145,7 @@
 	left: 0;
 }
 
-.address-list-grow {
+.flex-grow {
 	flex-grow: 10000;
 }
 
@@ -150,13 +165,14 @@
 
 .address-list-item-content {
 	width: 100%;
-	padding: var(--pd-sm);
+	padding: var(--pd-med);
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	gap: 1rem;
 	background-color: white;
 	transition: transform 500ms ease;
+	z-index: 1;
 }
 
 .show-delete {
@@ -172,6 +188,14 @@
 .address-list-item {
 	position: relative;
 	overflow: hidden;
+	display: flex;
+	align-items: center;
+}
+
+.buttons-group {
+	display: flex;
+	align-items: center;
+	gap: 3rem;
 }
 
 .address-text {
@@ -179,7 +203,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.125rem;
-	flex-grow: 2;
 }
 
 .address-list span {
@@ -217,16 +240,27 @@
 	bottom: 0;
 }
 
-.bring-up {
-	z-index: 1;
-}
-
-.bring-down {
-	z-index: -1;
-}
-
 .remove-button:hover {
 	background-color: maroon;
+}
+
+.remove-hover {
+	background-color: transparent;
+	padding: var(--pd-sm);
+	border: 0;
+	border-radius: 50%;
+}
+
+.remove-hover:hover {
+	background-color: #fafafa;
+}
+
+.remove-hover svg {
+	fill: none;
+	stroke: #cccccc;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2;
 }
 
 .optimize-button {
@@ -272,6 +306,25 @@
 
 .info-notification {
 	background-color: rgb(0, 200, 0);
+}
+
+.info-box {
+	display: flex;
+	align-items: start;
+	gap: 1rem;
+	font-size: var(--fs-300);
+	padding: var(--pd-med);
+	background-color: white;
+	border-radius: 4px;
+}
+
+.use-location-button {
+	padding: var(--pd-sm);
+	background-color: rgb(0, 200, 0);
+	color: white;
+	border-radius: 4px;
+	font-size: var(--fs-300);
+	border: 0;
 }
 
 @keyframes fade {

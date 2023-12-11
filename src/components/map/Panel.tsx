@@ -6,6 +6,7 @@ import { GoogleMap } from "@react-google-maps/api";
 import { Address } from "../../pages";
 import AddressInput from "../controls/AddressInput";
 import useSwipe from "../../utils/useSwipe";
+import InfoBox from "../controls/InfoBox";
 
 function getCenterOfCoords(addresses: Array<Address>) {
 	if (addresses.length === 1) return addresses[0].latLng;
@@ -84,13 +85,16 @@ const Panel = ({
 					clearSuggestions={clearSuggestions}
 					setFullPanel={setFullPanel}
 				/>
-				{addresses.length !== 0 && (
-					<AddressList
-						addresses={addresses}
-						setAddresses={setAddresses}
-						fullPanel={fullPanel}
-					/>
-				)}
+				<div className="flex-grow">
+					{addresses.length === 0 && <InfoBox />}
+					{addresses.length !== 0 && (
+						<AddressList
+							addresses={addresses}
+							setAddresses={setAddresses}
+							fullPanel={fullPanel}
+						/>
+					)}
+				</div>
 				<OptimizeRouteButton
 					addresses={addresses}
 					setAddresses={setAddresses}
