@@ -1,8 +1,10 @@
+import { Address } from "../pages";
+
 function degreesToRadians(degree: number) {
 	return degree * (Math.PI / 180);
 }
 
-export default function calculateDistance(
+export function calculateDistance(
 	latLng1: google.maps.LatLngLiteral,
 	latLng2: google.maps.LatLngLiteral
 ) {
@@ -24,4 +26,22 @@ export default function calculateDistance(
 					Math.cos(lng2Rad - lng1Rad)
 		) * radiusOfEarthInMiles
 	);
+}
+
+export function getCenterOfCoords(addresses: Array<Address>) {
+	if (addresses.length === 1) return addresses[0].latLng;
+
+	let center = { lat: 0, lng: 0 };
+
+	addresses.forEach(({ address, latLng }) => {
+		const { lat, lng } = latLng;
+
+		center.lat += lat;
+		center.lng += lng;
+	});
+
+	center.lat = center.lat / addresses.length;
+	center.lng = center.lng / addresses.length;
+
+	return center;
 }

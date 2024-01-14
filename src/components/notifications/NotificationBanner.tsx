@@ -1,11 +1,7 @@
 import { useState } from "react";
+import { Notification } from "../../context/NotificationsProvider";
 
-type NotificationBannerProps = {
-	message: string;
-	type: "error" | "info";
-};
-
-const NotificationBanner = ({ message, type }: NotificationBannerProps) => {
+const NotificationBanner = ({ message, type }: Notification) => {
 	const [visible, setVisible] = useState(true);
 
 	setTimeout(() => {

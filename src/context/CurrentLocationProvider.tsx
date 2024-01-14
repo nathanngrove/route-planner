@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { LatLngLiteral } from "../components/map/Map";
 import { useNotificationsUpdate } from "./NotificationsProvider";
 
@@ -34,7 +34,10 @@ const CurrentLocationProvider = ({
 				console.log(currentLocation);
 			},
 			(error) =>
-				updateNotifications("error", error.code + ": " + error.message),
+				updateNotifications({
+					type: "error",
+					message: error.code + ": " + error.message,
+				}),
 			{ enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
 		);
 	};

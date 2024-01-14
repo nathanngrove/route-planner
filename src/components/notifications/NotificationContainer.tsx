@@ -6,14 +6,16 @@ const NotificationContainer = () => {
 
 	return (
 		<div className="notifications-container">
-			{notifications?.error !== null &&
-				notifications?.error.map((err, i) => (
-					<NotificationBanner key={i} message={err} type={"error"} />
-				))}
-			{notifications?.info !== null &&
-				notifications?.info.map((err, i) => (
-					<NotificationBanner key={i} message={err} type={"info"} />
-				))}
+			{!!notifications &&
+				notifications.map((notification, i) => {
+					return (
+						<NotificationBanner
+							message={notification.message}
+							type={notification.type}
+							key={i}
+						/>
+					);
+				})}
 		</div>
 	);
 };

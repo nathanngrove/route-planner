@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Address } from "../../pages";
 import AddressListItem from "./AddressListItem";
 
@@ -14,6 +14,9 @@ const AddressList = ({
 	fullPanel,
 }: AddressListProps) => {
 	const [isEditing, setIsEditing] = useState(false);
+
+	const draggedAddress = useRef<number>(-1);
+	const draggedOverAddress = useRef<number>(-1);
 
 	return (
 		<div>
@@ -35,13 +38,15 @@ const AddressList = ({
 				className={`address-list ${
 					fullPanel ? "address-list-max" : "address-list-min"
 				}`}>
-				{addresses.map(({ address, latLng }) => (
+				{addresses.map((address) => (
 					<AddressListItem
-						key={latLng.lat + latLng.lng}
+						key={address.latLng.lat + address.latLng.lng}
 						address={address}
 						addresses={addresses}
 						setAddresses={setAddresses}
 						isEditing={isEditing}
+						draggedAddress={draggedAddress}
+						draggedOverAddress={draggedOverAddress}
 					/>
 				))}
 			</ul>

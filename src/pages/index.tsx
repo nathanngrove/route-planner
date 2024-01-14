@@ -12,6 +12,7 @@ import { getGeocode } from "use-places-autocomplete";
 export type Address = {
 	address: string;
 	latLng: LatLngLiteral;
+	positionInList: number;
 };
 
 export type DistanceObject = {
@@ -41,7 +42,11 @@ const Index = () => {
 			const formattedAddress = getAddressFromLatLng(currentLocation).then(
 				(address) => {
 					setAddresses([
-						{ address: address, latLng: currentLocation },
+						{
+							address: address,
+							latLng: currentLocation,
+							positionInList: 0,
+						},
 					]);
 				}
 			);

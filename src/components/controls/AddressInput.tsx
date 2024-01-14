@@ -54,21 +54,23 @@ const AddressInput = ({
 			setAddresses({
 				address: val,
 				latLng: { lat, lng },
+				positionInList: addresses.length,
 			});
 
 			return;
 		}
 
-		updateNotifications("error", "Something went wrong.");
+		updateNotifications({
+			type: "error",
+			message: "Something went wrong.",
+		});
 	};
 
 	return (
 		<Combobox onSelect={handleSelect} className="combobox-container">
 			<ComboboxInput
 				value={value}
-				onFocus={() => {
-					setFullPanel(true);
-				}}
+				onFocus={() => setFullPanel(true)}
 				onChange={(e) => setValue(e.target.value)}
 				disabled={!ready}
 				className="combobox-input"

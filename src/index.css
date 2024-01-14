@@ -195,7 +195,7 @@
 .buttons-group {
 	display: flex;
 	align-items: center;
-	gap: 3rem;
+	gap: 1rem;
 }
 
 .address-text {
@@ -261,6 +261,10 @@
 	stroke-linecap: round;
 	stroke-linejoin: round;
 	stroke-width: 2;
+}
+
+.remove-hover-placeholder svg {
+	stroke: white;
 }
 
 .optimize-button {

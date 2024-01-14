@@ -1,6 +1,6 @@
 import { useNotificationsUpdate } from "../../context/NotificationsProvider";
 import { Address, DistanceObject } from "../../pages";
-import calculateDistance from "../../utils/calculateDistance";
+import { calculateDistance } from "../../utils/mathUtils";
 
 function createDistancesMap(addresses: Array<Address>) {
 	const distancesMap: Map<string, Array<DistanceObject>> = new Map();
@@ -35,7 +35,8 @@ function createVisitedMap(addresses: Array<Address>) {
 
 function getShortestDistance(
 	distanceArray: Array<DistanceObject>,
-	visitedMap: Map<string, boolean>
+	visitedMap: Map<string, boolean>,
+	positionInList: number
 ): Address | null {
 	let lowestDistance = Number.POSITIVE_INFINITY;
 	let lowestAddress: Address | null = null;
@@ -43,7 +44,11 @@ function getShortestDistance(
 	distanceArray.forEach(({ distance, latLng, toAddress }) => {
 		if (distance < lowestDistance && visitedMap.get(toAddress) === false) {
 			lowestDistance = distance;
-			lowestAddress = { address: toAddress, latLng: latLng };
+			lowestAddress = {
+				address: toAddress,
+				latLng: latLng,
+				positionInList,
+			};
 		}
 	});
 
@@ -59,14 +64,18 @@ function createOptimizedRoute(
 	let currentAddress: Address | null = addresses[0];
 	let nextAddress: Address | null = null;
 
+	let positionInList = 1;
+
 	while (currentAddress !== null) {
 		nextAddress = getShortestDistance(
 			distancesMap.get(currentAddress!.address)!,
-			visitedMap
+			visitedMap,
+			positionInList
 		);
 		newAddresses.push(currentAddress!);
 		visitedMap.set(currentAddress!.address, true);
 		currentAddress = nextAddress;
+		positionInList++;
 	}
 
 	return newAddresses;
@@ -85,10 +94,11 @@ const OptimizeRouteButton = ({
 
 	function optimizeRoute() {
 		if (addresses.length <= 1) {
-			updateNotifications(
-				"error",
-				"You have to enter more than one address to optimize a route!"
-			);
+			updateNotifications({
+				type: "error",
+				message:
+					"You have to enter more than one address to optimize a route!",
+			});
 			return;
 		}
 
@@ -96,7 +106,7 @@ const OptimizeRouteButton = ({
 		createOptimizedRoute(newAddresses, addresses);
 		console.log(newAddresses);
 		setAddresses(newAddresses);
-		updateNotifications("info", "Route optimized!");
+		updateNotifications({ type: "info", message: "Route optimized!" });
 	}
 
 	return (

@@ -1,4 +1,3 @@
-import React from "react";
 import { useUpdateCurrentLocation } from "../../context/CurrentLocationProvider";
 
 const InfoBox = () => {

@@ -7,24 +7,7 @@ import { Address } from "../../pages";
 import AddressInput from "../controls/AddressInput";
 import useSwipe from "../../utils/useSwipe";
 import InfoBox from "../controls/InfoBox";
-
-function getCenterOfCoords(addresses: Array<Address>) {
-	if (addresses.length === 1) return addresses[0].latLng;
-
-	let center = { lat: 0, lng: 0 };
-
-	addresses.forEach(({ address, latLng }) => {
-		const { lat, lng } = latLng;
-
-		center.lat += lat;
-		center.lng += lng;
-	});
-
-	center.lat = center.lat / addresses.length;
-	center.lng = center.lng / addresses.length;
-
-	return center;
-}
+import { getCenterOfCoords } from "../../utils/mathUtils";
 
 type PanelProps = {
 	mapRef: React.MutableRefObject<GoogleMap | undefined>;
@@ -54,20 +37,10 @@ const Panel = ({
 		<div className={`panel ${fullPanel ? "panel-max" : "panel-min"}`}>
 			<div
 				className="panel-handle"
-				onClick={() => {
-					setFullPanel((prevPanel) => {
-						return !prevPanel;
-					});
-				}}
-				onTouchStart={(e) => {
-					onTouchStart(e);
-				}}
-				onTouchMove={(e) => {
-					onTouchMove(e);
-				}}
-				onTouchEnd={() => {
-					onTouchEnd();
-				}}></div>
+				onClick={() => setFullPanel((prevPanel) => !prevPanel)}
+				onTouchStart={(e) => onTouchStart(e)}
+				onTouchMove={(e) => onTouchMove(e)}
+				onTouchEnd={() => onTouchEnd()}></div>
 			<div className="panel-content-container">
 				<AddressInput
 					addresses={addresses}
@@ -86,8 +59,8 @@ const Panel = ({
 					setFullPanel={setFullPanel}
 				/>
 				<div className="flex-grow">
-					{addresses.length === 0 && <InfoBox />}
-					{addresses.length !== 0 && (
+					{!!(addresses.length === 0) && <InfoBox />}
+					{!!(addresses.length !== 0) && (
 						<AddressList
 							addresses={addresses}
 							setAddresses={setAddresses}
