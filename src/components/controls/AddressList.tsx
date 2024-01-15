@@ -38,13 +38,14 @@ const AddressList = ({
 				className={`address-list ${
 					fullPanel ? "address-list-max" : "address-list-min"
 				}`}>
-				{addresses.map((address) => (
+				{addresses.map((address, index) => (
 					<AddressListItem
 						key={address.latLng.lat + address.latLng.lng}
 						address={address}
 						addresses={addresses}
 						setAddresses={setAddresses}
 						isEditing={isEditing}
+						position={index}
 						draggedAddress={draggedAddress}
 						draggedOverAddress={draggedOverAddress}
 					/>

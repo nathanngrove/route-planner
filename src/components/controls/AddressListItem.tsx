@@ -7,6 +7,7 @@ type AddressListItemProps = {
 	addresses: Array<Address>;
 	setAddresses: (address: Array<Address>) => void;
 	isEditing: boolean;
+	position: number;
 	draggedAddress: React.MutableRefObject<number>;
 	draggedOverAddress: React.MutableRefObject<number>;
 };
@@ -15,10 +16,11 @@ const AddressListItem = ({
 	address,
 	addresses,
 	setAddresses,
+	position,
 	draggedAddress,
 	draggedOverAddress,
 }: AddressListItemProps) => {
-	const { address: addressString, latLng, positionInList } = address;
+	const { address: addressString, latLng } = address;
 
 	const [showDelete, setShowDelete] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
@@ -33,53 +35,6 @@ const AddressListItem = ({
 		},
 	});
 
-	// const [{ isDragging }, drag] = useDrag(() => ({
-	// 	type: itemTypes.ADDRESS,
-	// 	item: {
-	// 		type: itemTypes.ADDRESS,
-	// 		address: addressString,
-	// 		latLng,
-	// 		positionInList,
-	// 	},
-	// 	collect: (monitor) => ({
-	// 		isDragging: !!monitor.isDragging(),
-	// 	}),
-	// }));
-
-	// const [{ canDrop, isOver }, drop] = useDrop(() => ({
-	// 	accept: itemTypes.ADDRESS,
-	// 	drop: (item: {
-	// 		type: string;
-	// 		address: string;
-	// 		latLng: LatLngLiteral;
-	// 		positionInList: number;
-	// 	}) => {
-	// 		if (positionInList === item.positionInList) return;
-	// 		console.log("addresses before filter", addresses);
-	// 		const newAddresses = addresses.filter(
-	// 			(addr) => addr.address !== item.address
-	// 		);
-	// 		console.log("newAddresses after filter", newAddresses);
-	// 		newAddresses.splice(positionInList, 0, {
-	// 			address: item.address,
-	// 			latLng: item.latLng,
-	// 			positionInList: positionInList,
-	// 		});
-	// 		console.log("newAddresses after splice", newAddresses);
-	// 		newAddresses.forEach((address, i) => {
-	// 			address.positionInList = i;
-	// 		});
-
-	// 		console.log("newAddresses after numbering", newAddresses);
-
-	// 		setAddresses(newAddresses);
-	// 	},
-	// 	collect: (monitor) => ({
-	// 		isOver: monitor.isOver(),
-	// 		canDrop: monitor.canDrop(),
-	// 	}),
-	// }));
-
 	function handleSort() {
 		if (draggedAddress.current === -1 || draggedOverAddress.current === -1)
 			return;
@@ -91,11 +46,22 @@ const AddressListItem = ({
 			(addr) => addr.address !== addresses[draggedAddress.current].address
 		);
 
-		//add back in the draggedAddress
-
-		filteredAddresses.forEach((address, i) => {
-			address.positionInList = i;
+		filteredAddresses.push({
+			address: addresses[draggedAddress.current].address,
+			latLng: addresses[draggedAddress.current].latLng,
 		});
+
+		let i = filteredAddresses.length - 1;
+		while (i !== draggedOverAddress.current) {
+			console.log("i", i, filteredAddresses[i]);
+			console.log("i-1", i - 1, filteredAddresses[i - 1]);
+			console.log("draggedOver", draggedOverAddress.current);
+			const temp = filteredAddresses[i];
+			filteredAddresses[i] = filteredAddresses[i - 1];
+			filteredAddresses[i - 1] = temp;
+
+			i = i - 1;
+		}
 
 		setAddresses(filteredAddresses);
 	}
@@ -112,30 +78,19 @@ const AddressListItem = ({
 			(addr) => addr.address !== addressString
 		);
 
-		filteredAddresses.forEach((address, i) => {
-			address.positionInList = i;
-		});
-
 		setAddresses([...filteredAddresses]);
 	};
 
 	return (
 		<li
-			// ref={(node) => drag(drop(node))}
 			className="address-list-item"
 			onMouseEnter={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
 			onDragStart={() => {
-				draggedAddress.current = positionInList;
-				console.log(draggedAddress.current, "onDragStart");
+				draggedAddress.current = position;
 			}}
 			onDragEnter={() => {
-				draggedOverAddress.current = positionInList;
-				console.log(
-					draggedOverAddress.current,
-					"onDragEnter",
-					draggedAddress.current
-				);
+				draggedOverAddress.current = position;
 			}}
 			onDragEnd={handleSort}
 			onDragOver={(e) => e.preventDefault()}
@@ -152,7 +107,7 @@ const AddressListItem = ({
 				onTouchStart={(e) => onTouchStart(e)}
 				onTouchEnd={() => onTouchEnd()}>
 				<img src="https://placehold.co/30x30" alt="" />
-				<span>{positionInList}</span>
+				<span>{position}</span>
 				<p className="address-text flex-grow">
 					{shortenedAddress}
 					<span>{restOfAddress}</span>

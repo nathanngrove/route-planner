@@ -12,7 +12,6 @@ import { getGeocode } from "use-places-autocomplete";
 export type Address = {
 	address: string;
 	latLng: LatLngLiteral;
-	positionInList: number;
 };
 
 export type DistanceObject = {
@@ -45,7 +44,6 @@ const Index = () => {
 						{
 							address: address,
 							latLng: currentLocation,
-							positionInList: 0,
 						},
 					]);
 				}

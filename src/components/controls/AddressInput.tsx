@@ -54,7 +54,6 @@ const AddressInput = ({
 			setAddresses({
 				address: val,
 				latLng: { lat, lng },
-				positionInList: addresses.length,
 			});
 
 			return;

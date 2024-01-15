@@ -35,8 +35,7 @@ function createVisitedMap(addresses: Array<Address>) {
 
 function getShortestDistance(
 	distanceArray: Array<DistanceObject>,
-	visitedMap: Map<string, boolean>,
-	positionInList: number
+	visitedMap: Map<string, boolean>
 ): Address | null {
 	let lowestDistance = Number.POSITIVE_INFINITY;
 	let lowestAddress: Address | null = null;
@@ -47,7 +46,6 @@ function getShortestDistance(
 			lowestAddress = {
 				address: toAddress,
 				latLng: latLng,
-				positionInList,
 			};
 		}
 	});
@@ -69,8 +67,7 @@ function createOptimizedRoute(
 	while (currentAddress !== null) {
 		nextAddress = getShortestDistance(
 			distancesMap.get(currentAddress!.address)!,
-			visitedMap,
-			positionInList
+			visitedMap
 		);
 		newAddresses.push(currentAddress!);
 		visitedMap.set(currentAddress!.address, true);
