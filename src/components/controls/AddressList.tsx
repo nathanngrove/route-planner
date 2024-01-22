@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import { Address } from "../../pages";
 import AddressListItem from "./AddressListItem";
 
@@ -13,27 +12,8 @@ const AddressList = ({
 	setAddresses,
 	fullPanel,
 }: AddressListProps) => {
-	const [isEditing, setIsEditing] = useState(false);
-
-	const draggedAddress = useRef<number>(-1);
-	const draggedOverAddress = useRef<number>(-1);
-
 	return (
 		<div>
-			{!isEditing && (
-				<button
-					className="address-menu-button"
-					onClick={() => setIsEditing(true)}>
-					Edit
-				</button>
-			)}
-			{isEditing && (
-				<button
-					className="address-menu-button"
-					onClick={() => setIsEditing(false)}>
-					Done
-				</button>
-			)}
 			<ul
 				className={`address-list ${
 					fullPanel ? "address-list-max" : "address-list-min"
@@ -44,10 +24,7 @@ const AddressList = ({
 						address={address}
 						addresses={addresses}
 						setAddresses={setAddresses}
-						isEditing={isEditing}
 						position={index}
-						draggedAddress={draggedAddress}
-						draggedOverAddress={draggedOverAddress}
 					/>
 				))}
 			</ul>

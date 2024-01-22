@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Address } from "../../pages";
 import useSwipe from "../../utils/useSwipe";
+import { useDrag, useDrop } from "react-dnd";
+import { itemTypes } from "../../utils/itemTypes";
 
 type AddressListItemProps = {
 	address: Address;
 	addresses: Array<Address>;
 	setAddresses: (address: Array<Address>) => void;
-	isEditing: boolean;
 	position: number;
-	draggedAddress: React.MutableRefObject<number>;
-	draggedOverAddress: React.MutableRefObject<number>;
 };
 
 const AddressListItem = ({
@@ -17,15 +16,17 @@ const AddressListItem = ({
 	addresses,
 	setAddresses,
 	position,
-	draggedAddress,
-	draggedOverAddress,
 }: AddressListItemProps) => {
 	const { address: addressString, latLng } = address;
 
 	const [showDelete, setShowDelete] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
 
-	const { onTouchMove, onTouchStart, onTouchEnd } = useSwipe({
+	const {
+		onTouchMove: onSwipeToDelete,
+		onTouchStart: onStartToDelete,
+		onTouchEnd: onEndToDelete,
+	} = useSwipe({
 		direction: "horizontal",
 		leftFunction: () => {
 			setShowDelete(true);
@@ -35,27 +36,61 @@ const AddressListItem = ({
 		},
 	});
 
-	function handleSort() {
-		if (draggedAddress.current === -1 || draggedOverAddress.current === -1)
-			return;
-		if (draggedAddress.current === draggedOverAddress.current) return;
+	const [{ isDragging }, drag] = useDrag(
+		() => ({
+			type: itemTypes.ADDRESS,
+			item: {
+				type: itemTypes.ADDRESS,
+				draggedAddress: addressString,
+			},
+			collect: (monitor) => ({
+				isDragging: !!monitor.isDragging(),
+			}),
+		}),
+		[addresses]
+	);
+
+	const [{ canDrop, isOver }, drop] = useDrop(
+		() => ({
+			accept: itemTypes.ADDRESS,
+			drop: (item: { type: string; draggedAddress: string }) => {
+				const dragged = addresses.findIndex(
+					(addr) => addr.address === item.draggedAddress
+				);
+				const draggedOver = addresses.findIndex(
+					(addr) => addr.address === addressString
+				);
+
+				console.log(addresses);
+
+				handleSort(dragged, draggedOver);
+			},
+			collect: (monitor) => ({
+				isOver: monitor.isOver(),
+				canDrop: monitor.canDrop(),
+			}),
+		}),
+		[addresses]
+	);
+
+	function handleSort(draggedAddress: number, draggedOverAddress: number) {
+		console.log("dragged: ", draggedAddress, "over: ", draggedOverAddress);
+		if (draggedAddress === -1 || draggedOverAddress === -1) return;
+		if (draggedAddress === draggedOverAddress) return;
 
 		const newAddresses = [...addresses];
 
 		const filteredAddresses = newAddresses.filter(
-			(addr) => addr.address !== addresses[draggedAddress.current].address
+			(addr) => addr.address !== addresses[draggedAddress].address
 		);
 
 		filteredAddresses.push({
-			address: addresses[draggedAddress.current].address,
-			latLng: addresses[draggedAddress.current].latLng,
+			address: addresses[draggedAddress].address,
+			latLng: addresses[draggedAddress].latLng,
 		});
 
 		let i = filteredAddresses.length - 1;
-		while (i !== draggedOverAddress.current) {
-			console.log("i", i, filteredAddresses[i]);
-			console.log("i-1", i - 1, filteredAddresses[i - 1]);
-			console.log("draggedOver", draggedOverAddress.current);
+		while (i !== draggedOverAddress) {
 			const temp = filteredAddresses[i];
 			filteredAddresses[i] = filteredAddresses[i - 1];
 			filteredAddresses[i - 1] = temp;
@@ -86,26 +121,18 @@ const AddressListItem = ({
 			className="address-list-item"
 			onMouseEnter={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
-			onDragStart={() => {
-				draggedAddress.current = position;
-			}}
-			onDragEnter={() => {
-				draggedOverAddress.current = position;
-			}}
-			onDragEnd={handleSort}
-			onDragOver={(e) => e.preventDefault()}
+			ref={(node) => drag(drop(node))}
+			onTouchMove={(e) => onSwipeToDelete(e)}
+			onTouchStart={(e) => onStartToDelete(e)}
+			onTouchEnd={() => onEndToDelete()}
 			draggable>
 			<button className={"remove-button"} onClick={removeAddress}>
 				Delete
 			</button>
-
 			<div
 				className={`address-list-item-content ${
 					showDelete ? "show-delete" : "hide-delete"
-				}`}
-				onTouchMove={(e) => onTouchMove(e)}
-				onTouchStart={(e) => onTouchStart(e)}
-				onTouchEnd={() => onTouchEnd()}>
+				}`}>
 				<img src="https://placehold.co/30x30" alt="" />
 				<span>{position}</span>
 				<p className="address-text flex-grow">

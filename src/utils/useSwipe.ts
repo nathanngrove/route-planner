@@ -24,7 +24,7 @@ const useSwipe = (swipe: Swipe) => {
 	);
 	const minSwipeDistance = 50;
 
-	function onTouchStart(e: React.TouchEvent<HTMLDivElement>) {
+	function onTouchStart(e: React.TouchEvent<HTMLLIElement | HTMLDivElement>) {
 		setTouchEnd(null);
 		setTouchStart({
 			x: e.targetTouches[0].clientX,
@@ -32,7 +32,7 @@ const useSwipe = (swipe: Swipe) => {
 		});
 	}
 
-	function onTouchMove(e: React.TouchEvent<HTMLDivElement>) {
+	function onTouchMove(e: React.TouchEvent<HTMLLIElement | HTMLDivElement>) {
 		setTouchEnd({
 			x: e.targetTouches[0].clientX,
 			y: e.targetTouches[0].clientY,
