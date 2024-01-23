@@ -262,10 +262,6 @@
 	stroke-width: 2;
 }
 
-.remove-hover-placeholder svg {
-	stroke: white;
-}
-
 .optimize-button {
 	padding: var(--pd-med);
 	background-color: rgb(0, 200, 0);

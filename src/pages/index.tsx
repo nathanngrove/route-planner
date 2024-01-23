@@ -8,6 +8,7 @@ import {
 	useUpdateCurrentLocation,
 } from "../context/CurrentLocationProvider";
 import { getGeocode } from "use-places-autocomplete";
+import { useAddresses } from "../context/AddressesProvider";
 
 export type Address = {
 	address: string;
@@ -22,8 +23,9 @@ export type DistanceObject = {
 
 const Index = () => {
 	const mapRef = useRef<GoogleMap>();
-	const [addresses, setAddresses] = useState<Array<Address>>([]);
 	const [fullPanel, setFullPanel] = useState(false);
+
+	const { setAddresses } = useAddresses();
 	const currentLocation = useCurrentLocation();
 
 	const getAddressFromLatLng = async (latLng: LatLngLiteral) => {
@@ -56,12 +58,10 @@ const Index = () => {
 			<NotificationContainer />
 			<Panel
 				mapRef={mapRef}
-				addresses={addresses}
-				setAddresses={setAddresses}
 				fullPanel={fullPanel}
 				setFullPanel={setFullPanel}
 			/>
-			<Map mapRef={mapRef} addresses={addresses} fullPanel={fullPanel} />
+			<Map mapRef={mapRef} fullPanel={fullPanel} />
 		</div>
 	);
 };

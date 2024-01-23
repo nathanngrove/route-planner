@@ -1,17 +1,13 @@
-import { Address } from "../../pages";
+import { useAddresses } from "../../context/AddressesProvider";
 import AddressListItem from "./AddressListItem";
 
 type AddressListProps = {
-	addresses: Array<Address>;
-	setAddresses: (addresses: Array<Address>) => void;
 	fullPanel: boolean;
 };
 
-const AddressList = ({
-	addresses,
-	setAddresses,
-	fullPanel,
-}: AddressListProps) => {
+const AddressList = ({ fullPanel }: AddressListProps) => {
+	const { addresses } = useAddresses();
+
 	return (
 		<div>
 			<ul
@@ -22,8 +18,6 @@ const AddressList = ({
 					<AddressListItem
 						key={address.latLng.lat + address.latLng.lng}
 						address={address}
-						addresses={addresses}
-						setAddresses={setAddresses}
 						position={index}
 					/>
 				))}

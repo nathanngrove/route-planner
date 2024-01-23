@@ -1,7 +1,8 @@
-import { LoadScriptProps, useLoadScript } from "@react-google-maps/api";
 import Index from "./pages/index";
+import { LoadScriptProps, useLoadScript } from "@react-google-maps/api";
 import NotificationsProvider from "./context/NotificationsProvider";
 import CurrentLocationProvider from "./context/CurrentLocationProvider";
+import AddressesProvider from "./context/AddressesProvider";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { DndProvider } from "react-dnd-multi-backend";
 
@@ -17,11 +18,13 @@ function App() {
 
 	return (
 		<NotificationsProvider>
-			<CurrentLocationProvider>
-				<DndProvider options={HTML5toTouch}>
-					<Index />
-				</DndProvider>
-			</CurrentLocationProvider>
+			<AddressesProvider>
+				<CurrentLocationProvider>
+					<DndProvider options={HTML5toTouch}>
+						<Index />
+					</DndProvider>
+				</CurrentLocationProvider>
+			</AddressesProvider>
 		</NotificationsProvider>
 	);
 }

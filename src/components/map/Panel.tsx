@@ -3,29 +3,23 @@ import AddressList from "../controls/AddressList";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import OptimizeRouteButton from "../controls/OptimizeRouteButton";
 import { GoogleMap } from "@react-google-maps/api";
-import { Address } from "../../pages";
 import AddressInput from "../controls/AddressInput";
-import useSwipe from "../../utils/useSwipe";
+import useSwipe from "../../hooks/useSwipe";
 import InfoBox from "../controls/InfoBox";
 import { getCenterOfCoords } from "../../utils/mathUtils";
+import { useAddresses } from "../../context/AddressesProvider";
 
 type PanelProps = {
 	mapRef: React.MutableRefObject<GoogleMap | undefined>;
-	addresses: Array<Address>;
-	setAddresses: (addresses: Array<Address>) => void;
 	fullPanel: boolean;
 	setFullPanel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Panel = ({
-	mapRef,
-	addresses,
-	setAddresses,
-	fullPanel,
-	setFullPanel,
-}: PanelProps) => {
+const Panel = ({ mapRef, fullPanel, setFullPanel }: PanelProps) => {
 	const { ready, value, setValue, suggestions, clearSuggestions } =
 		usePlacesAutocomplete();
+
+	const { addresses, setAddresses } = useAddresses();
 
 	const { onTouchEnd, onTouchMove, onTouchStart } = useSwipe({
 		direction: "vertical",
@@ -43,8 +37,7 @@ const Panel = ({
 				onTouchEnd={() => onTouchEnd()}></div>
 			<div className="panel-content-container">
 				<AddressInput
-					addresses={addresses}
-					setAddresses={(position) => {
+					setAddressesOnSelect={(position) => {
 						const newAddresses = [...addresses, position];
 						const center = getCenterOfCoords(newAddresses);
 						setAddresses(newAddresses);
@@ -61,17 +54,10 @@ const Panel = ({
 				<div className="flex-grow">
 					{!!(addresses.length === 0) && <InfoBox />}
 					{!!(addresses.length !== 0) && (
-						<AddressList
-							addresses={addresses}
-							setAddresses={setAddresses}
-							fullPanel={fullPanel}
-						/>
+						<AddressList fullPanel={fullPanel} />
 					)}
 				</div>
-				<OptimizeRouteButton
-					addresses={addresses}
-					setAddresses={setAddresses}
-				/>
+				<OptimizeRouteButton />
 			</div>
 		</div>
 	);

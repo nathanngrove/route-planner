@@ -1,3 +1,4 @@
+import { useAddresses } from "../../context/AddressesProvider";
 import { useNotificationsUpdate } from "../../context/NotificationsProvider";
 import { Address, DistanceObject } from "../../pages";
 import { calculateDistance } from "../../utils/mathUtils";
@@ -53,10 +54,7 @@ function getShortestDistance(
 	return lowestAddress;
 }
 
-function createOptimizedRoute(
-	newAddresses: Array<Address>,
-	addresses: Array<Address>
-) {
+function createOptimizedRoute(newAddresses: Address[], addresses: Address[]) {
 	const distancesMap = createDistancesMap(addresses);
 	const visitedMap = createVisitedMap(addresses);
 	let currentAddress: Address | null = addresses[0];
@@ -77,16 +75,8 @@ function createOptimizedRoute(
 
 	return newAddresses;
 }
-
-type OptimizeRouteButtonProps = {
-	addresses: Array<Address>;
-	setAddresses: (addresses: Array<Address>) => void;
-};
-
-const OptimizeRouteButton = ({
-	addresses,
-	setAddresses,
-}: OptimizeRouteButtonProps) => {
+const OptimizeRouteButton = () => {
+	const { addresses, setAddresses } = useAddresses();
 	const updateNotifications = useNotificationsUpdate();
 
 	function optimizeRoute() {
@@ -99,7 +89,7 @@ const OptimizeRouteButton = ({
 			return;
 		}
 
-		const newAddresses: Array<Address> = [];
+		const newAddresses: Address[] = [];
 		createOptimizedRoute(newAddresses, addresses);
 		console.log(newAddresses);
 		setAddresses(newAddresses);

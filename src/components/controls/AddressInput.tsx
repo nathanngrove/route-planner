@@ -15,12 +15,12 @@ import {
 import "@reach/combobox/styles.css";
 import { useNotificationsUpdate } from "../../context/NotificationsProvider";
 import { Address } from "../../pages";
+import { useAddresses } from "../../context/AddressesProvider";
 
 type AddressInputProps = {
-	addresses: Array<Address>;
-	setAddresses: (address: Address) => void;
 	ready: boolean;
 	value: string;
+	setAddressesOnSelect: (address: Address) => void;
 	setValue: SetValue;
 	suggestions: Suggestions;
 	clearSuggestions: ClearSuggestions;
@@ -28,10 +28,9 @@ type AddressInputProps = {
 };
 
 const AddressInput = ({
-	addresses,
-	setAddresses,
 	ready,
 	value,
+	setAddressesOnSelect,
 	setValue,
 	suggestions,
 	clearSuggestions,
@@ -39,6 +38,7 @@ const AddressInput = ({
 }: AddressInputProps) => {
 	const { status, data } = suggestions;
 
+	const { addresses } = useAddresses();
 	const updateNotifications = useNotificationsUpdate();
 
 	const handleSelect = async (val: string) => {
@@ -51,9 +51,9 @@ const AddressInput = ({
 			const results = await getGeocode({ address: val });
 			const { lat, lng } = await getLatLng(results[0]);
 
-			setAddresses({
+			setAddressesOnSelect({
 				address: val,
-				latLng: { lat, lng },
+				latLng: { lat: lat, lng: lng },
 			});
 
 			return;
