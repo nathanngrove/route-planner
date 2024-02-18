@@ -5,6 +5,7 @@ import CurrentLocationProvider from "./context/CurrentLocationProvider";
 import AddressesProvider from "./context/AddressesProvider";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { DndProvider } from "react-dnd-multi-backend";
+import RoutesProvider from "./context/RoutesProvider";
 
 const libraries: LoadScriptProps["libraries"] = ["places"];
 
@@ -18,13 +19,15 @@ function App() {
 
 	return (
 		<NotificationsProvider>
-			<AddressesProvider>
-				<CurrentLocationProvider>
-					<DndProvider options={HTML5toTouch}>
-						<Index />
-					</DndProvider>
-				</CurrentLocationProvider>
-			</AddressesProvider>
+			<RoutesProvider>
+				<AddressesProvider>
+					<CurrentLocationProvider>
+						<DndProvider options={HTML5toTouch}>
+							<Index />
+						</DndProvider>
+					</CurrentLocationProvider>
+				</AddressesProvider>
+			</RoutesProvider>
 		</NotificationsProvider>
 	);
 }

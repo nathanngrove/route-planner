@@ -52,6 +52,7 @@ const AddressInput = ({
 			const { lat, lng } = await getLatLng(results[0]);
 
 			setAddressesOnSelect({
+				id: results[0].place_id,
 				address: val,
 				latLng: { lat: lat, lng: lng },
 			});

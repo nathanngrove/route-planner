@@ -4,7 +4,10 @@ import useSwipe from "../../hooks/useSwipe";
 import DragButton from "./buttons/DragButton";
 import GoButton from "./buttons/GoButton";
 import RemoveButton from "./buttons/RemoveButton";
-import SwipeToShowDeleteButton from "./buttons/SwipeToShowDeleteButton";
+import MobileDeleteButton from "./buttons/MobileDeleteButton";
+import { itemTypes } from "../../utils/itemTypes";
+import { useDrop } from "react-dnd";
+import { useAddresses } from "../../context/AddressesProvider";
 
 type AddressListItemProps = {
 	address: Address;
@@ -12,10 +15,12 @@ type AddressListItemProps = {
 };
 
 const AddressListItem = ({ address, position }: AddressListItemProps) => {
-	const { address: addressString, latLng } = address;
+	const { id, address: addressString, latLng } = address;
 
 	const [showDelete, setShowDelete] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
+
+	const { addresses, setAddresses } = useAddresses();
 
 	const {
 		onTouchMove: onSwipeToDelete,
@@ -26,6 +31,56 @@ const AddressListItem = ({ address, position }: AddressListItemProps) => {
 		leftFunction: () => setShowDelete(true),
 		rightFunction: () => setShowDelete(false),
 	});
+
+	const [{}, drop] = useDrop(
+		() => ({
+			accept: itemTypes.ADDRESS,
+			drop: (item: { type: string; draggedAddress: string }) => {
+				const dragged = addresses.findIndex(
+					(addr) => addr.address === item.draggedAddress
+				);
+				const draggedOver = addresses.findIndex(
+					(addr) => addr.address === addressString
+				);
+
+				handleSort(dragged, draggedOver);
+			},
+			collect: (monitor) => ({
+				isOver: monitor.isOver(),
+				canDrop: monitor.canDrop(),
+			}),
+		}),
+		[addresses]
+	);
+
+	function handleSort(draggedAddress: number, draggedOverAddress: number) {
+		console.log("dragged: ", draggedAddress, "over: ", draggedOverAddress);
+		if (draggedAddress === -1 || draggedOverAddress === -1) return;
+		if (draggedAddress === draggedOverAddress) return;
+
+		const newAddresses = [...addresses];
+
+		const filteredAddresses = newAddresses.filter(
+			(addr) => addr.address !== addresses[draggedAddress].address
+		);
+
+		filteredAddresses.push({
+			id: addresses[draggedAddress].id,
+			address: addresses[draggedAddress].address,
+			latLng: addresses[draggedAddress].latLng,
+		});
+
+		let i = filteredAddresses.length - 1;
+		while (i !== draggedOverAddress) {
+			const temp = filteredAddresses[i];
+			filteredAddresses[i] = filteredAddresses[i - 1];
+			filteredAddresses[i - 1] = temp;
+
+			i = i - 1;
+		}
+
+		setAddresses(filteredAddresses);
+	}
 
 	const firstCommaLoction = addressString.indexOf(",");
 	const shortenedAddress = addressString.slice(0, firstCommaLoction);
@@ -42,8 +97,8 @@ const AddressListItem = ({ address, position }: AddressListItemProps) => {
 			onTouchMove={(e) => onSwipeToDelete(e)}
 			onTouchStart={(e) => onStartToDelete(e)}
 			onTouchEnd={() => onEndToDelete()}
-			draggable>
-			<SwipeToShowDeleteButton address={addressString} />
+			ref={drop}>
+			<MobileDeleteButton address={addressString} />
 			<div
 				className={`address-list-item-content ${
 					showDelete ? "show-delete" : "hide-delete"
@@ -59,7 +114,7 @@ const AddressListItem = ({ address, position }: AddressListItemProps) => {
 						isHovering={isHovering}
 						address={addressString}
 					/>
-					<GoButton />
+					<GoButton lat={latLng.lat} lng={latLng.lng} />
 				</div>
 			</div>
 		</li>

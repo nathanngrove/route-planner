@@ -11,14 +11,9 @@ import { getGeocode } from "use-places-autocomplete";
 import { useAddresses } from "../context/AddressesProvider";
 
 export type Address = {
+	id: string;
 	address: string;
 	latLng: LatLngLiteral;
-};
-
-export type DistanceObject = {
-	toAddress: string;
-	latLng: LatLngLiteral;
-	distance: number;
 };
 
 const Index = () => {
@@ -28,26 +23,22 @@ const Index = () => {
 	const { setAddresses } = useAddresses();
 	const currentLocation = useCurrentLocation();
 
-	const getAddressFromLatLng = async (latLng: LatLngLiteral) => {
+	const getAddressFromLatLng = async (
+		latLng: LatLngLiteral
+	): Promise<Address> => {
 		const result = await getGeocode({
 			location: { lat: latLng.lat, lng: latLng.lng },
 		});
+		const address: string = result[0].formatted_address;
 
-		const address: string = result[0]["formatted_address"];
-
-		return address;
+		return { id: result[0].place_id, address: address, latLng: latLng };
 	};
 
 	useEffect(() => {
 		if (currentLocation !== null) {
 			const formattedAddress = getAddressFromLatLng(currentLocation).then(
-				(address) => {
-					setAddresses([
-						{
-							address: address,
-							latLng: currentLocation,
-						},
-					]);
+				(currentAddress) => {
+					setAddresses([currentAddress]);
 				}
 			);
 		}

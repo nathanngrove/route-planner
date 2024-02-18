@@ -1,11 +1,11 @@
 import { useAddresses } from "../../../context/AddressesProvider";
 import { removeAddress } from "../../../utils/removeAddress";
 
-type SwipeToShowDeleteButtonProps = {
+type MobileDeleteButtonProps = {
 	address: string;
 };
 
-const SwipeToShowDeleteButton = ({ address }: SwipeToShowDeleteButtonProps) => {
+const MobileDeleteButton = ({ address }: MobileDeleteButtonProps) => {
 	const { addresses, setAddresses } = useAddresses();
 
 	return (
@@ -17,4 +17,4 @@ const SwipeToShowDeleteButton = ({ address }: SwipeToShowDeleteButtonProps) => {
 	);
 };
 
-export default SwipeToShowDeleteButton;
+export default MobileDeleteButton;

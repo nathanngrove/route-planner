@@ -1,10 +1,10 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
 import { useCurrentLocation } from "../../context/CurrentLocationProvider";
 import { useAddresses } from "../../context/AddressesProvider";
+import { useRoutes } from "../../context/RoutesProvider";
 
 export type LatLngLiteral = google.maps.LatLngLiteral;
-type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
 
 type MapProps = {
@@ -14,6 +14,7 @@ type MapProps = {
 
 const Map = ({ mapRef, fullPanel }: MapProps) => {
 	const { addresses } = useAddresses();
+	const { routes } = useRoutes();
 	const currentLocation = useCurrentLocation();
 
 	const center = useMemo<LatLngLiteral>(
@@ -36,12 +37,18 @@ const Map = ({ mapRef, fullPanel }: MapProps) => {
 				mapContainerClassName="map-container"
 				options={options}
 				onLoad={onLoad}>
-				{addresses &&
-					addresses.map(({ latLng }) => (
-						<Marker
-							key={latLng.lat + latLng.lng}
-							position={latLng}
+				{routes &&
+					routes.map((route, i) => (
+						<DirectionsRenderer
+							key={i}
+							directions={route}
+							options={{}}
 						/>
+					))}
+				{addresses &&
+					!routes &&
+					addresses.map(({ id, address, latLng }) => (
+						<Marker key={id} position={latLng} />
 					))}
 			</GoogleMap>
 		</div>
